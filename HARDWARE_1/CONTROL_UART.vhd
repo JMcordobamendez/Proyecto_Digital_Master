@@ -25,14 +25,21 @@ architecture A1 of CONTROL_UART is
 	
 begin
     --Maquina Estados Sincroniza (circuito secuencial)
-    --SINCR: process(CLK)
 	SINCR: process(RESET, CLK)
 	begin
+<<<<<<< HEAD
             if (RESET = '1') then
 	        STATE <= WAIT_1;
 	    elsif rising_edge(CLK) then
 	        STATE <= STATE_FORWARD;
 	    end if;
+=======
+		if (RESET = '1') then
+			STATE <= WAIT_1;
+	    elsif rising_edge(CLK) then
+			STATE <= STATE_FORWARD;
+		end if;
+>>>>>>> 20e71d2fef0ce2ccee2627ade7837a77058b355b
 	end process;
 	--Maquina Estados Decoder Estado (circuito combibacional)
 	DECSTATE: process(STATE, READY, DATA, C1)
@@ -43,6 +50,7 @@ begin
 	    ENA <= '0';
 	    case STATE is
 		    when WAIT_1 =>
+<<<<<<< HEAD
 		        if (READY = '1') then
 			    if (unsigned(DATA) = 49) then
 			        STATE_FORWARD <= CH1_E_a;
@@ -52,6 +60,19 @@ begin
 			        STATE_FORWARD <= WAIT_1;
 			    end if;
                         end if;
+=======
+			    if (READY = '1') then
+				    if (unsigned(DATA) = 49) then
+					    STATE_FORWARD <= CH1_E_a;
+					elsif (unsigned(DATA) = 50) then
+					    STATE_FORWARD <= CH2_E_a;
+					else
+					    STATE_FORWARD <= WAIT_1;
+					end if;
+				else
+				    STATE_FORWARD <= WAIT_1;
+				end if;
+>>>>>>> 20e71d2fef0ce2ccee2627ade7837a77058b355b
 				C1_RESET <= '1';
 				SEL <= '0';
 			
@@ -91,6 +112,7 @@ begin
 				
 			when CH1_E_c =>
 			    if (READY = '0') then
+<<<<<<< HEAD
 				STATE_FORWARD <= WRITE_CH1a;
 			    else
 				STATE_FORWARD <= CH1_E_c;
@@ -106,6 +128,23 @@ begin
 			    end if;
 			    ENA <= '1';
 			    SEL <= '1';
+=======
+				    STATE_FORWARD <= WRITE_CH1a;
+				else
+					STATE_FORWARD <= CH1_E_c;
+				end if;
+				ENA <= '1';
+				SEL <= '0';
+				
+			when CH2_E_c =>
+			    if (READY = '0') then
+				    STATE_FORWARD <= WRITE_CH2a;
+				else
+					STATE_FORWARD <= CH2_E_c;
+				end if;
+				ENA <= '1';
+				SEL <= '1';
+>>>>>>> 20e71d2fef0ce2ccee2627ade7837a77058b355b
 				
 			when WRITE_CH1a =>
 			    STATE_FORWARD <= WRITE_CH1c;
@@ -113,11 +152,16 @@ begin
 			    SEL <= '0';
 				
 			when WRITE_CH2a =>
+<<<<<<< HEAD
 			    STATE_FORWARD <= WRITE_CH2c;
+=======
+				STATE_FORWARD <= WRITE_CH2c;
+>>>>>>> 20e71d2fef0ce2ccee2627ade7837a77058b355b
 			    C1_DO <= '1';
 			    SEL <= '1';
 				
 			when WRITE_CH1c =>
+<<<<<<< HEAD
 			    STATE_FORWARD <= WRITE_CH1b;
 			    SEL <= '0';
 				
@@ -140,6 +184,30 @@ begin
 				STATE_FORWARD <= WAIT_1;
 			    end if;
 		            SEL <= '1';
+=======
+				STATE_FORWARD <= WRITE_CH1b;
+			    SEL <= '0';
+				
+			when WRITE_CH2c =>
+				STATE_FORWARD <= WRITE_CH2b;
+				SEL <= '1';
+				
+			when WRITE_CH1b =>
+			    if (C1 < 640) then
+				    STATE_FORWARD <= CH1_E_b;
+				else
+				    STATE_FORWARD <= WAIT_1;
+				end if;
+				SEL <= '0';
+				
+			when WRITE_CH2b =>
+			    if (C1 < 640) then
+				    STATE_FORWARD <= CH2_E_b;
+				else
+				    STATE_FORWARD <= WAIT_1;
+				end if;
+				SEL <= '1';
+>>>>>>> 20e71d2fef0ce2ccee2627ade7837a77058b355b
 				
 			when others =>
 			    STATE_FORWARD <= WAIT_1;
